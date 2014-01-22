@@ -74,7 +74,7 @@ $(PRG).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 # dependency:
-main.o: main.c ./lib/usart.o 
+main.o: main.c ./lib/usart.o ./lib/DHT11.c 
 clean:
 	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak 
 	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
