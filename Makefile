@@ -51,7 +51,7 @@ MCU_TARGET     = atmega48p
 #MCU_TARGET     = attiny84
 #MCU_TARGET     = attiny85
 #MCU_TARGET     = attiny861
-OPTIMIZE       = -O2
+OPTIMIZE       = -Os
 
 DEFS           =
 LIBS           =
@@ -74,7 +74,7 @@ $(PRG).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 # dependency:
-main.o: main.c ./lib/usart.o ./lib/DHT11.c 
+main.o: main.c ./lib/usart.c ./lib/DHT11.c ./lib/modbus.c
 clean:
 	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak 
 	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)

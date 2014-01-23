@@ -9,29 +9,42 @@
 #include "lib/usart.h"
 #include "lib/DHT11.c"
 
+#define MB_SEND(MSG,LEN) USSendMessage(MSG,LEN)
+#define MB_DATA_DHT11_H(addr) DHTgetHum()
+#define MB_DATA_DHT11_T(addr) DHTgetTemp()
+#include "lib/modbus.h"
+
 
 #define EE_ADDRESS 0x00
-
-#define MSG_IDLE 	0
-#define MSG_RECV	1
-#define MSG_TIMEOUT 2
-#define MSG_PROCESS 3
 
 volatile uint8_t address;
 volatile uint64_t clock;
 
 uint8_t message[32];
 
+uint8_t DHT11_H[1];
+uint8_t DHT11_T[1];
+
 void clockInit();
 void everySecond();
 void every10ms();
 void processMessage(uint8_t len);
 
+inline uint8_t DHT11_H_read(uint8_t idx){
+	return DHTgetHum();
+}
+inline uint8_t DHT11_T_read(uint8_t idx){
+	return DHTgetTemp();
+}
+
+
 int main()
 {
+
 	USART_Init(25);
 	clockInit();
 	address = eeprom_read_byte(EE_ADDRESS);
+	MBinit(address);
 	
 	sei();
 
@@ -73,7 +86,7 @@ int main()
 		
 		if (msgStatus == PROCESS)
 		{
-			processMessage(msgIdx);
+			MBprocessMessage(message,msgIdx);
 			msgStatus = IDLE;
 		}
 
@@ -94,64 +107,25 @@ void clockInit(){
 	TCCR0A = (1<<WGM01);
 	// 16MHz/1024/156 ~ 100Hz
 	OCR0A = 156;
-	// Presclaer 1024
+	// Prescaler 1024
 	TCCR0B = (1<<CS02)|(1<<CS00);
 	TIMSK0 = (1<<OCIE0A);
 }
 
 // Things which do every second
 void everySecond(){
-	USSendByte(' ');
+/*	USSendByte(' ');
 	USSendNumber(DHTgetHum());
 	USSendByte(' ');
 	USSendNumber(DHTgetTemp());
 	USSendByte(' ');
 	USSendNumber(DHTgetCS());
 	USSendByte('\n');
-	//USSendString("Measuring\n");
+*/	//USSendString("Measuring\n");
 	DHTmeasure();
 }
 
 void every10ms(){
-
-}
-
-void processMessage(uint8_t len){
-	if (message[0]!=address){
-		return;
-	}
-
-	USSendMessage(message,len);
-
-	uint16_t crc;
-	crc = 0xffff;
-	for (uint8_t i=0;i<len;i++){
-		crc = _crc16_update(crc,message[i]);
-	}
-	if (crc != 0)
-	{
-		USSendByte(0xEE);
-		return;
-	}
-
-	switch (message[1]){
-		case 0x03:	// Read analog output holding registers
-			{
-				uint16_t regAddr;
-				regAddr = (uint16_t)message[2];
-				uint16_t regCnt;
-				regCnt = (uint16_t)message[4];
-				if (regAddr == 0x01 && regCnt == 1){
-					message[2]=1;
-					message[3]=DHTgetHum();
-					message[4]=0;
-					USSendMessage(message,5);
-				}
-			}
-			break;
-	
-	}
-
 
 }
 
