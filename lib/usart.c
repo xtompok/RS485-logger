@@ -10,6 +10,7 @@
 #include "circular.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/crc16.h>
 
 volatile CQUEUE USTxbuf;
 volatile CQUEUE USRxbuf;
@@ -35,7 +36,7 @@ inline void USART_Init( unsigned int ubrr )
 	UCSR0B &= ~(1<<RXEN0); \
 	UCSR0B |=   1<<UDRIE0;} 
 
-inline void USSendByte(unsigned char data)
+void USSendByte(unsigned char data)
 {
 	CQpush(data, &USTxbuf);
 	USSTARTTX	
@@ -65,6 +66,20 @@ void USSendNumber(unsigned char cislo)
 	USSTARTTX	
 
 }
+void USSendMessage(uint8_t * message, uint8_t len)
+{
+	uint16_t crc;
+	crc=0xFFFF;
+
+	for (uint8_t i = 0;i<len;i++){
+		CQpush(message[i],&USTxbuf);
+		crc = _crc16_update(crc,message[i]);
+	}
+	CQpush((uint8_t)(crc&0xFF),&USTxbuf);
+	CQpush((uint8_t)(crc>>8),&USTxbuf);
+
+	USSTARTTX
+}
 
 ISR(USART_UDRE_vect)
 {
@@ -93,11 +108,11 @@ ISR(USART_RX_vect)
 	data = UDR0;
 	CQpush(data	, &USRxbuf);
 
-	if ((data>32)&&(data<128))
+/*	if ((data>32)&&(data<128))
 	{
 	USSendByte(data);
 	}
-	
+*/	
 }
 
 ISR(USART_TX_vect)

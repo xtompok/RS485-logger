@@ -11,6 +11,7 @@ inline void USART_Init( unsigned int ubrr );
 inline void USSendByte(unsigned char data);
 void USSendString(char string[]);
 void USART_Transmit( unsigned char data );
+void USSendMessage(uint8_t * message, uint8_t len);
 
 #include "usart.c"
 
