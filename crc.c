@@ -20,7 +20,7 @@ crc16_update(uint16_t crc, uint8_t a)
 }
 
 int main(int argc, char ** argv){
-	uint8_t msg []={0xFF,0x03,0x01,0x00,0x01,0x00};
+	uint8_t msg []={0x01,0x03,0x01,0x00,0x01,0x00};
 	int crc;
 	crc = 0xFFFF;
 	for (int i =0 ; i < sizeof msg; i++){

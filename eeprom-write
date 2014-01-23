@@ -1,0 +1,1 @@
+avrdude -c usbasp -p m48 -v -F -U eeprom:w:0x01:m
