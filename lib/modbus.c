@@ -57,7 +57,7 @@ void MBprocessMessage(uint8_t * message,uint8_t len){
 					case MB_ADDR_DHT11_T:
 						sensCnt=eeprom_read_byte((uint8_t *)MB_ADDR_DHT11_T);
 						addr = MBmsg[3];
-						cnt = MBmsg[4];
+						cnt = MBmsg[5];
 						if ((addr+cnt)>sensCnt){
 							MBerror(MB_EXC_OUT_OF_RANGE);
 							return;
