@@ -16,7 +16,7 @@ volatile CQUEUE USTxbuf;
 volatile CQUEUE USRxbuf;
 
 //********* USART functions *******//
-inline void USART_Init( unsigned int ubrr )
+void USART_Init( unsigned int ubrr )
 {
 	
 	/* Set baud rate */
@@ -91,12 +91,12 @@ ISR(USART_UDRE_vect)
 	}
 }
 
-inline unsigned char USGetByte()
+unsigned char USGetByte()
 {
 	return CQpop(&USRxbuf);
 }
 
-inline unsigned char USisByte()
+unsigned char USisByte()
 {
 	return (USRxbuf.state==2)?0:1;
 }

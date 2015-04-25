@@ -54,7 +54,7 @@ MCU_TARGET     = atmega48p
 OPTIMIZE       = -Os
 
 DEFS           =
-LIBS           =
+LIBS           =lib/usart.o lib/quadenc.o lib/circular.o
 
 # You should not have to change anything below here.
 
@@ -70,13 +70,14 @@ OBJDUMP        = avr-objdump
 
 all: $(PRG).elf lst text eeprom
 
-$(PRG).elf: $(OBJ)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+$(PRG).elf: $(OBJ) $(LIBS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
 # dependency:
-main.o: main.c ./lib/usart.c ./lib/DHT11.c ./lib/modbus.c
+main.o: main.c ./lib/usart.h ./lib/quadenc.h
+#./lib/DHT11.o ./lib/modbus.o
 clean:
-	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak 
+	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak lib/*.o 
 	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
 
 lst:  $(PRG).lst
@@ -124,22 +125,5 @@ esrec: $(PRG)_eeprom.srec
 # Every thing below here is used by avr-libc's build system and can be ignored
 # by the casual user.
 
-FIG2DEV                 = fig2dev
 EXTRA_CLEAN_FILES       = *.hex *.bin *.srec
-
-dox: eps png pdf
-
-eps: $(PRG).eps
-png: $(PRG).png
-pdf: $(PRG).pdf
-
-%.eps: %.fig
-	$(FIG2DEV) -L eps $< $@
-
-%.pdf: %.fig
-	$(FIG2DEV) -L pdf $< $@
-
-%.png: %.fig
-	$(FIG2DEV) -L png $< $@
-
 

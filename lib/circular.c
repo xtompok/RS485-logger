@@ -6,8 +6,9 @@
  *  Copyright 2010 Jaroška. All rights reserved.
  *
  */
-#include <stdio.h>
-#include <ctype.h>
+//#include <stdio.h>
+//#include <ctype.h>
+#include "circular.h"
 
 
 void CQpush(unsigned char item,volatile CQUEUE * q)

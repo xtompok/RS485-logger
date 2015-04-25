@@ -7,11 +7,13 @@
  *
  */
 
-inline void USART_Init( unsigned int ubrr );
-inline void USSendByte(unsigned char data);
+#ifndef USART_H
+#define USART_H
+void USART_Init( unsigned int ubrr );
+void USSendByte(unsigned char data);
+void USSendNumber(unsigned char cislo);
 void USSendString(char string[]);
 void USART_Transmit( unsigned char data );
 void USSendMessage(uint8_t * message, uint8_t len);
 
-#include "usart.c"
-
+#endif

@@ -6,6 +6,9 @@
  *  Copyright 2010 Jaroška. All rights reserved.
  *
  */
+#ifndef CIRCULAR_H
+#define CIRCULAR_H
+
 #include <stdio.h>
 #include <ctype.h>
 # define MAXCQSIZE 128
@@ -22,5 +25,4 @@ char CQstate(volatile CQUEUE * q);
 unsigned char CQpop(volatile CQUEUE * q);
 
 
-#include "circular.c"
-
+#endif

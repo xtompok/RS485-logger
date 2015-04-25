@@ -29,6 +29,26 @@
 #define	PCCHB_vect	PCINT0_vect
 //#define
 
+#define QUAD1_DIR	DDRC// DDR  
+#define QUAD1_PORT	PORTC// PORT 
+#define QUAD1_PIN	PINC// PORT 
+#define QUAD1_A		1<<PC0// pin A
+#define QUAD1_B		1<<PC1// pin B
+#define QUAD1_IEBIT	1<<PCIE1// bit in PCICR for pins A and B
+#define QUAD1_IMSK	PCMSK1// PCIMSK register for pins A and B
+#define QUAD1_AMSK	1<<PCINT8// PCIMSK bit for A
+#define QUAD1_BMSK	1<<PCINT9// PCIMSK bit for B
+
+#define QUAD2_DIR	DDRC// DDR  
+#define QUAD2_PORT	PORTC// PORT 
+#define QUAD2_PIN	PINC// PORT 
+#define QUAD2_A		1<<PC2// pin A
+#define QUAD2_B		1<<PC3// pin B
+#define QUAD2_IEBIT	1<<PCIE1// bit in PCICR for pins A and B
+#define QUAD2_IMSK	PCMSK1// PCIMSK register for pins A and B
+#define QUAD2_AMSK	1<<PCINT10// PCIMSK bit for A
+#define QUAD2_BMSK	1<<PCINT11// PCIMSK bit for B
+
 
 
 
